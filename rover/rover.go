@@ -9,7 +9,8 @@ import (
 
 // Rover contains the rover state and publishes methods for commanding the rover
 type Rover struct {
-	position mars.Position
+	position   mars.Position
+	surfaceMap mars.Map
 }
 
 // delta describes a change in position
@@ -41,35 +42,47 @@ var turns = map[mars.Direction]turn{
 }
 
 // New creates a new rover initialized at x, y and facing in direction
-func New(position mars.Position) *Rover {
+func New(position mars.Position, surfaceMap mars.Map) *Rover {
 	return &Rover{
-		position,
+		position:   position,
+		surfaceMap: surfaceMap,
 	}
 }
 
 // Execute executes a list of instructions and returns the resulting position
-func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
+func (r *Rover) Execute(instructions []mars.Instruction) (mars.Position, error) {
+	var err error
 	for _, instruction := range instructions {
 		switch instruction {
 		case mars.Forward, mars.Backward:
-			r.move(instruction)
+			err = r.move(instruction)
 		case mars.Left, mars.Right:
 			r.turn(instruction)
 		default:
 			panic(fmt.Sprintf("bad instruction %s", instruction))
 		}
+		if err != nil {
+			break
+		}
 
 	}
-	return r.position
+	return r.position, err
 }
 
-func (r *Rover) move(instruction mars.Instruction) {
+func (r *Rover) move(instruction mars.Instruction) error {
 	scale := 1
 	if instruction == mars.Backward {
 		scale = -1
 	}
+
 	change := deltas[r.position.Direction()]
-	r.position = r.position.Moved(change.x*scale, change.y*scale)
+	proposed := r.position.Moved(change.x*scale, change.y*scale)
+	if r.surfaceMap.HasObstacle(proposed.X(), proposed.Y()) {
+		return mars.ErrStoppedByObstacle
+	}
+
+	r.position = proposed
+	return nil
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {

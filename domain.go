@@ -19,8 +19,13 @@ const (
 	Right    Instruction = "R"
 )
 
-// ErrBadCommands is returned if a command string contains invalid instructions
-var ErrBadCommands = errors.New("invalid commands")
+var (
+	// ErrBadCommands is returned if a command string contains invalid instructions
+	ErrBadCommands = errors.New("invalid commands")
+
+	// ErrStoppedByObstacle is returned if the rover stops before hitting an obstacle
+	ErrStoppedByObstacle = errors.New("stopped by obstacle")
+)
 
 // Coordinate is a point on the surface of mars
 type Coordinate struct {
@@ -40,7 +45,7 @@ type Position interface {
 // Rover interface is implemented by any rover implementation
 type Rover interface {
 	// Execute carries out a list of instructions and returns the resulting position
-	Execute(instructions []Instruction) Position
+	Execute(instructions []Instruction) (Position, error)
 }
 
 // Map describes a map of the surface and can be queried for obstacles
