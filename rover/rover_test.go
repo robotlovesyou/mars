@@ -1,15 +1,21 @@
 package rover_test
 
 import (
+	"testing"
+
 	"github.com/robotlovesyou/mars"
 	"github.com/robotlovesyou/mars/parser"
 	"github.com/robotlovesyou/mars/rover"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
-func newRover() *rover.Rover {
-	return rover.New(0, 0, mars.North)
+// defaultStart returns the default start position.
+func defaultStart() mars.Position {
+	return mars.Position{
+		X:         0,
+		Y:         0,
+		Direction: mars.North,
+	}
 }
 
 func instructions(command string, r *require.Assertions) []mars.Instruction {
@@ -18,74 +24,64 @@ func instructions(command string, r *require.Assertions) []mars.Instruction {
 	return instructions
 }
 
-func TestRoverIsCorrectlyInitialized(t *testing.T) {
-	rov := newRover()
+func testRoverExecute(command string, start, expected mars.Position, t *testing.T) {
 	r := require.New(t)
-	inst := instructions("", r)
+	rov := rover.New(start)
+	inst := instructions(command, r)
 	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
-		X:         0,
-		Y:         0,
-		Direction: mars.North,
-	}, pos)
+	r.Equal(expected, pos)
+}
+
+func TestRoverIsCorrectlyInitialized(t *testing.T) {
+	testRoverExecute("", defaultStart(), defaultStart(), t)
 }
 
 func TestRoverMovesForward(t *testing.T) {
-	rov := newRover()
-	r := require.New(t)
-	inst := instructions("F", r)
-	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
+	expected := mars.Position{
 		X:         0,
 		Y:         1,
 		Direction: mars.North,
-	}, pos)
+	}
+	testRoverExecute("F", defaultStart(), expected, t)
 }
 
 func TestRoverMovesBackward(t *testing.T) {
-	rov := newRover()
-	r := require.New(t)
-	inst := instructions("B", r)
-	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
+	expected := mars.Position{
 		X:         0,
 		Y:         -1,
 		Direction: mars.North,
-	}, pos)
+	}
+	testRoverExecute("B", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsLeft(t *testing.T) {
-	rov := newRover()
-	r := require.New(t)
-	inst := instructions("L", r)
-	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
+	expected := mars.Position{
 		X:         0,
 		Y:         0,
 		Direction: mars.West,
-	}, pos)
+	}
+	testRoverExecute("L", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsRight(t *testing.T) {
-	rov := newRover()
-	r := require.New(t)
-	inst := instructions("R", r)
-	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
+	expected := mars.Position{
 		X:         0,
 		Y:         0,
 		Direction: mars.East,
-	}, pos)
+	}
+	testRoverExecute("R", defaultStart(), expected, t)
 }
 
 func TestRoverFollowsInstructions(t *testing.T) {
-	rov := rover.New(4, 2, mars.East)
-	r := require.New(t)
-	inst := instructions("FLFFFRFLB", r)
-	pos := rov.Execute(inst)
-	r.Equal(mars.Position{
+	start := mars.Position{
+		X:         4,
+		Y:         2,
+		Direction: mars.East,
+	}
+	expected := mars.Position{
 		X:         6,
 		Y:         4,
 		Direction: mars.North,
-	}, pos)
+	}
+	testRoverExecute("FLFFFRFLB", start, expected, t)
 }
