@@ -41,13 +41,9 @@ var turns = map[mars.Direction]turn{
 }
 
 // New creates a new rover initialized at x, y and facing in direction
-func New(x, y int, direction mars.Direction) *Rover {
+func New(position mars.Position) *Rover {
 	return &Rover{
-		position: mars.Position{
-			X:         x,
-			Y:         y,
-			Direction: direction,
-		},
+		position,
 	}
 }
 
