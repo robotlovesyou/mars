@@ -46,9 +46,9 @@ func New(x, y int, direction mars.Direction) *Rover {
 func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
 	for _, instruction := range instructions {
 		switch instruction {
-		case "F", "B":
+		case mars.Forward, mars.Backward:
 			r.move(instruction)
-		case "L", "R":
+		case mars.Left, mars.Right:
 			r.turn(instruction)
 		default:
 			panic(fmt.Sprintf("bad instruction %s", instruction))
@@ -60,7 +60,7 @@ func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
 
 func (r *Rover) move(instruction mars.Instruction) {
 	scale := 1
-	if instruction == "B" {
+	if instruction == mars.Backward {
 		scale = -1
 	}
 	change := deltas[r.position.Direction]
@@ -70,7 +70,7 @@ func (r *Rover) move(instruction mars.Instruction) {
 
 func (r *Rover) turn(instruction mars.Instruction) {
 	change := facings[r.position.Direction]
-	if instruction == "L" {
+	if instruction == mars.Left {
 		r.position.Direction = change.left
 	} else {
 		r.position.Direction = change.right

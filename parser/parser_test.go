@@ -11,7 +11,16 @@ func TestCorrectlyParsesCommand(t *testing.T) {
 	r := require.New(t)
 	instructions, err := parser.Parse("FLFFFRFLB")
 	r.NoError(err)
-	r.Equal([]mars.Instruction{"F", "L", "F", "F" , "F", "R", "F", "L", "B"}, instructions)
+	r.Equal([]mars.Instruction{
+		mars.Forward,
+		mars.Left,
+		mars.Forward,
+		mars.Forward,
+		mars.Forward,
+		mars.Right,
+		mars.Forward,
+		mars.Left,
+		mars.Backward}, instructions)
 
 }
 
