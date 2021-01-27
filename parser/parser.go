@@ -1,6 +1,6 @@
 package parser
 
-import mars "github.com/robotlovesyou/newstore"
+import mars "github.com/robotlovesyou/mars"
 
 func Parse(commands string) ([]mars.Instruction, error) {
 	instructions := make([]mars.Instruction, 0, len(commands))

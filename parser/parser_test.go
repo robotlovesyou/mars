@@ -1,8 +1,8 @@
 package parser_test
 
 import (
-	mars "github.com/robotlovesyou/newstore"
-	"github.com/robotlovesyou/newstore/parser"
+	"github.com/robotlovesyou/mars"
+	"github.com/robotlovesyou/mars/parser"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
