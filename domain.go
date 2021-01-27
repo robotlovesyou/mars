@@ -10,6 +10,10 @@ const (
 	South Direction = "SOUTH"
 	East Direction = "EAST"
 	West Direction = "WEST"
+	Forward Instruction = "F"
+	Backward Instruction = "B"
+	Left Instruction = "L"
+	Right Instruction = "R"
 )
 
 var ErrBadCommands = errors.New("invalid commands")
