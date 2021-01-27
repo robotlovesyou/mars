@@ -46,10 +46,8 @@ func New(x, y int, direction mars.Direction) *Rover {
 func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
 	for _, instruction := range instructions {
 		switch instruction {
-		case "F":
-			r.move(1)
-		case "B":
-			r.move(-1)
+		case "F", "B":
+			r.move(instruction)
 		case "L", "R":
 			r.turn(instruction)
 		default:
@@ -60,10 +58,14 @@ func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
 	return r.position
 }
 
-func (r *Rover) move(direction int) {
+func (r *Rover) move(instruction mars.Instruction) {
+	scale := 1
+	if instruction == "B" {
+		scale = -1
+	}
 	change := deltas[r.position.Direction]
-	r.position.X += change.x * direction
-	r.position.Y += change.y * direction
+	r.position.X += change.x * scale
+	r.position.Y += change.y * scale
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {
