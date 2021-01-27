@@ -1,10 +1,11 @@
 package parser_test
 
 import (
+	"testing"
+
 	"github.com/robotlovesyou/mars"
 	"github.com/robotlovesyou/mars/parser"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestCorrectlyParsesCommand(t *testing.T) {

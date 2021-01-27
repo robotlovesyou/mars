@@ -68,16 +68,15 @@ func (r *Rover) move(instruction mars.Instruction) {
 	if instruction == mars.Backward {
 		scale = -1
 	}
-	change := deltas[r.position.Direction]
-	r.position.X += change.x * scale
-	r.position.Y += change.y * scale
+	change := deltas[r.position.Direction()]
+	r.position = r.position.Moved(change.x*scale, change.y*scale)
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {
-	change := turns[r.position.Direction]
+	change := turns[r.position.Direction()]
 	if instruction == mars.Left {
-		r.position.Direction = change.left
+		r.position = r.position.Turned(change.left)
 	} else {
-		r.position.Direction = change.right
+		r.position = r.position.Turned(change.right)
 	}
 }

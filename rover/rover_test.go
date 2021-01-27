@@ -3,6 +3,8 @@ package rover_test
 import (
 	"testing"
 
+	"github.com/robotlovesyou/mars/position"
+
 	"github.com/robotlovesyou/mars"
 	"github.com/robotlovesyou/mars/parser"
 	"github.com/robotlovesyou/mars/rover"
@@ -11,11 +13,7 @@ import (
 
 // defaultStart returns the default start position.
 func defaultStart() mars.Position {
-	return mars.Position{
-		X:         0,
-		Y:         0,
-		Direction: mars.North,
-	}
+	return position.New(0, 0, mars.North)
 }
 
 func instructions(command string, r *require.Assertions) []mars.Instruction {
@@ -37,51 +35,27 @@ func TestRoverIsCorrectlyInitialized(t *testing.T) {
 }
 
 func TestRoverMovesForward(t *testing.T) {
-	expected := mars.Position{
-		X:         0,
-		Y:         1,
-		Direction: mars.North,
-	}
+	expected := position.New(0, 1, mars.North)
 	testRoverExecute("F", defaultStart(), expected, t)
 }
 
 func TestRoverMovesBackward(t *testing.T) {
-	expected := mars.Position{
-		X:         0,
-		Y:         -1,
-		Direction: mars.North,
-	}
+	expected := position.New(0, -1, mars.North)
 	testRoverExecute("B", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsLeft(t *testing.T) {
-	expected := mars.Position{
-		X:         0,
-		Y:         0,
-		Direction: mars.West,
-	}
+	expected := position.New(0, 0, mars.West)
 	testRoverExecute("L", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsRight(t *testing.T) {
-	expected := mars.Position{
-		X:         0,
-		Y:         0,
-		Direction: mars.East,
-	}
+	expected := position.New(0, 0, mars.East)
 	testRoverExecute("R", defaultStart(), expected, t)
 }
 
 func TestRoverFollowsInstructions(t *testing.T) {
-	start := mars.Position{
-		X:         4,
-		Y:         2,
-		Direction: mars.East,
-	}
-	expected := mars.Position{
-		X:         6,
-		Y:         4,
-		Direction: mars.North,
-	}
+	start := position.New(4, 2, mars.East)
+	expected := position.New(6, 4, mars.North)
 	testRoverExecute("FLFFFRFLB", start, expected, t)
 }

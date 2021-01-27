@@ -22,11 +22,18 @@ const (
 // ErrBadCommands is returned if a command string contains invalid instructions
 var ErrBadCommands = errors.New("invalid commands")
 
+type Coordinate struct {
+	X int
+	Y int
+}
+
 // Position describes the x and y coordinates and direction of the rover
-type Position struct {
-	X         int
-	Y         int
-	Direction Direction
+type Position interface {
+	X() int
+	Y() int
+	Direction() Direction
+	Moved(x, y int) Position
+	Turned(to Direction) Position
 }
 
 // Rover interface is implemented by any rover implementation
