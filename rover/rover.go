@@ -1,48 +1,57 @@
+// package rover contains an implementation of the mars.Rover interface
 package rover
 
 import (
 	"fmt"
+
 	"github.com/robotlovesyou/mars"
 )
 
+// Rover contains the rover state and publishes methods for commanding the rover
 type Rover struct {
 	position mars.Position
 }
 
+// delta describes a change in position
 type delta struct {
 	x int
 	y int
 }
 
-type facing struct {
-	left mars.Direction
+// turn describes a change in direction
+type turn struct {
+	left  mars.Direction
 	right mars.Direction
 }
 
+// deltas describe the change in position given a particular direction
 var deltas = map[mars.Direction]delta{
-	mars.North: {x:0,  y:1},
+	mars.North: {x: 0, y: 1},
 	mars.South: {x: 0, y: -1},
-	mars.East: {x: 1, y: 0},
-	mars.West: {x: -1, y: 0},
+	mars.East:  {x: 1, y: 0},
+	mars.West:  {x: -1, y: 0},
 }
 
-var facings = map[mars.Direction]facing {
+// turns describe the change in direction given a turn instruction and an original direction
+var turns = map[mars.Direction]turn{
 	mars.North: {left: mars.West, right: mars.East},
 	mars.South: {left: mars.East, right: mars.West},
-	mars.East: {left: mars.North, right: mars.South},
-	mars.West: {left: mars.South, right: mars.North},
+	mars.East:  {left: mars.North, right: mars.South},
+	mars.West:  {left: mars.South, right: mars.North},
 }
 
+// New creates a new rover initialized at x, y and facing in direction
 func New(x, y int, direction mars.Direction) *Rover {
-	return &Rover {
+	return &Rover{
 		position: mars.Position{
-			X: x,
-			Y: y,
+			X:         x,
+			Y:         y,
 			Direction: direction,
 		},
 	}
 }
 
+// Execute executes a list of instructions and returns the resulting position
 func (r *Rover) Execute(instructions []mars.Instruction) mars.Position {
 	for _, instruction := range instructions {
 		switch instruction {
@@ -69,7 +78,7 @@ func (r *Rover) move(instruction mars.Instruction) {
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {
-	change := facings[r.position.Direction]
+	change := turns[r.position.Direction]
 	if instruction == mars.Left {
 		r.position.Direction = change.left
 	} else {
