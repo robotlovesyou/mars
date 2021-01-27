@@ -2,7 +2,7 @@ package rover
 
 import (
 	"fmt"
-	mars "github.com/robotlovesyou/newstore"
+	"github.com/robotlovesyou/mars"
 )
 
 type Rover struct {

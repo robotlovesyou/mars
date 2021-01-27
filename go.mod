@@ -1,4 +1,4 @@
-module github.com/robotlovesyou/newstore
+module github.com/robotlovesyou/mars
 
 go 1.15
 
