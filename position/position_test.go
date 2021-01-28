@@ -1,12 +1,23 @@
 package position_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/robotlovesyou/mars/position"
 
 	"github.com/stretchr/testify/require"
 )
+
+func TestDirectionStringIsCorrect(t *testing.T) {
+	r := require.New(t)
+	r.Equal("NORTH", fmt.Sprintf("%v", position.North))
+	r.Equal("SOUTH", fmt.Sprintf("%v", position.South))
+	r.Equal("EAST", fmt.Sprintf("%v", position.East))
+	r.Equal("WEST", fmt.Sprintf("%v", position.West))
+	r.Equal("INVALID DIRECTION: X", fmt.Sprintf("%v", position.Direction('X')))
+
+}
 
 func testPosition() position.Position {
 	return position.NewPosition(1, 2, position.North)

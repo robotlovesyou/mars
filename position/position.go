@@ -1,15 +1,33 @@
 // package position contains types which can be used to describe a position (coordinates and direction)
 package position
 
+import "fmt"
+
 // Direction describes the direction the rover is facing
-type Direction string
+type Direction byte
 
 const (
-	North Direction = "NORTH"
-	South Direction = "SOUTH"
-	East  Direction = "EAST"
-	West  Direction = "WEST"
+	North Direction = 'N'
+	South Direction = 'S'
+	East  Direction = 'E'
+	West  Direction = 'W'
 )
+
+func (d Direction) String() string {
+	switch d {
+	case North:
+		return "NORTH"
+	case South:
+		return "SOUTH"
+	case East:
+		return "EAST"
+	case West:
+		return "WEST"
+	default:
+		// panics here are caught by the standard library so return a warning
+		return fmt.Sprintf("INVALID DIRECTION: %s", string(d))
+	}
+}
 
 // Coordinate is a point on the surface of mars
 type Coordinate struct {
