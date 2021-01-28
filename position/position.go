@@ -17,6 +17,22 @@ type Coordinate struct {
 	Y int
 }
 
+// Add two coordinates
+func (c Coordinate) Add(addend Coordinate) Coordinate {
+	return Coordinate{
+		X: c.X + addend.X,
+		Y: c.Y + addend.Y,
+	}
+}
+
+// Scale this coordinate by an integer, returning the result
+func (c Coordinate) Scale(scalar int) Coordinate {
+	return Coordinate{
+		X: c.X * scalar,
+		Y: c.Y * scalar,
+	}
+}
+
 // Position a position on the surface. It implements the mars.Position interface
 type Position struct {
 	coordinate Coordinate
