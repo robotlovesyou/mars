@@ -19,10 +19,15 @@ const (
 var (
 	// ErrBadCommands is returned if a command string contains invalid instructions
 	ErrBadCommands = errors.New("invalid commands")
-
 	// ErrStoppedByObstacle is returned if the rover stops before hitting an obstacle
 	ErrStoppedByObstacle = errors.New("stopped by obstacle")
+	// ErrBadPosition is returned if a parsed position is invalid
+	ErrBadPosition = errors.New("bad position")
+	// ErrBadCoordinate is returned if a parsed coordinate is invalid
+	ErrBadCoordinate = errors.New("bad coordinate")
 )
+
+var ()
 
 // Rover interface is implemented by any rover implementation
 type Rover interface {
