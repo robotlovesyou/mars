@@ -5,52 +5,48 @@ import (
 	"fmt"
 
 	"github.com/robotlovesyou/mars"
+	"github.com/robotlovesyou/mars/position"
 )
 
 // Rover contains the rover state and publishes methods for commanding the rover
 type Rover struct {
-	position   mars.Position
+	position   *position.Position
 	surfaceMap mars.Map
-}
-
-// delta describes a change in position
-type delta struct {
-	x int
-	y int
 }
 
 // turn describes a change in direction
 type turn struct {
-	left  mars.Direction
-	right mars.Direction
+	left  position.Direction
+	right position.Direction
 }
 
 // deltas describe the change in position given a particular direction
-var deltas = map[mars.Direction]delta{
-	mars.North: {x: 0, y: 1},
-	mars.South: {x: 0, y: -1},
-	mars.East:  {x: 1, y: 0},
-	mars.West:  {x: -1, y: 0},
+var deltas = map[position.Direction]position.Coordinate{
+	position.North: position.NewCoordinate(0, 1),
+	position.South: position.NewCoordinate(0, -1),
+	position.East:  position.NewCoordinate(1, 0),
+	position.West:  position.NewCoordinate(-1, 0),
 }
 
 // turns describe the change in direction given a turn instruction and an original direction
-var turns = map[mars.Direction]turn{
-	mars.North: {left: mars.West, right: mars.East},
-	mars.South: {left: mars.East, right: mars.West},
-	mars.East:  {left: mars.North, right: mars.South},
-	mars.West:  {left: mars.South, right: mars.North},
+var turns = map[position.Direction]turn{
+	position.North: {left: position.West, right: position.East},
+	position.South: {left: position.East, right: position.West},
+	position.East:  {left: position.North, right: position.South},
+	position.West:  {left: position.South, right: position.North},
 }
 
-// New creates a new rover initialized at x, y and facing in direction
-func New(position mars.Position, surfaceMap mars.Map) *Rover {
+// NewPosition creates a new rover initialized at x, y and facing in direction
+func New(position *position.Position, surfaceMap mars.Map) *Rover {
 	return &Rover{
 		position:   position,
 		surfaceMap: surfaceMap,
 	}
 }
 
-// Execute executes a list of instructions and returns the resulting position
-func (r *Rover) Execute(instructions []mars.Instruction) (mars.Position, error) {
+// Execute executes a list of instructions and returns the resulting position.
+// If an obstacle is encountered it returns the last position and ErrStoppedByObstacle
+func (r *Rover) Execute(instructions []mars.Instruction) (*position.Position, error) {
 	var err error
 	for _, instruction := range instructions {
 		switch instruction {
@@ -66,7 +62,8 @@ func (r *Rover) Execute(instructions []mars.Instruction) (mars.Position, error) 
 		}
 
 	}
-	return r.position, err
+	// copy the position to prevent modification of internal state
+	return position.NewPosition(r.position.Coordinate(), r.position.Direction()), err
 }
 
 func (r *Rover) move(instruction mars.Instruction) error {
@@ -75,21 +72,21 @@ func (r *Rover) move(instruction mars.Instruction) error {
 		scale = -1
 	}
 
-	change := deltas[r.position.Direction()]
-	proposed := r.position.Moved(change.x*scale, change.y*scale)
-	if r.surfaceMap.HasObstacle(proposed.X(), proposed.Y()) {
+	change := deltas[r.position.Direction()].Scale(scale)
+	proposed := r.position.Coordinate().Add(change)
+	if r.surfaceMap.HasObstacle(proposed) {
 		return mars.ErrStoppedByObstacle
 	}
 
-	r.position = proposed
+	r.position.MoveTo(proposed)
 	return nil
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {
 	change := turns[r.position.Direction()]
 	if instruction == mars.Left {
-		r.position = r.position.Turned(change.left)
+		r.position.TurnTo(change.left)
 	} else {
-		r.position = r.position.Turned(change.right)
+		r.position.TurnTo(change.right)
 	}
 }

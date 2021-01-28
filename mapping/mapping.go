@@ -1,15 +1,15 @@
 package mapping
 
-import "github.com/robotlovesyou/mars"
+import "github.com/robotlovesyou/mars/position"
 
 // Map can be queried for obstacles
 type Map struct {
-	obstacles map[mars.Coordinate]bool
+	obstacles map[position.Coordinate]bool
 }
 
-// New returns a new map
-func New(obstacleList []mars.Coordinate) *Map {
-	obstacles := make(map[mars.Coordinate]bool)
+// NewPosition returns a new map
+func New(obstacleList []position.Coordinate) *Map {
+	obstacles := make(map[position.Coordinate]bool)
 	for _, coordinate := range obstacleList {
 		obstacles[coordinate] = true
 	}
@@ -19,6 +19,6 @@ func New(obstacleList []mars.Coordinate) *Map {
 }
 
 // HasObstacle returns true if a coordinate contains an obstacle
-func (m *Map) HasObstacle(x, y int) bool {
-	return m.obstacles[mars.Coordinate{X: x, Y: y}]
+func (m *Map) HasObstacle(coord position.Coordinate) bool {
+	return m.obstacles[coord]
 }
