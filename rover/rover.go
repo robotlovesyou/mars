@@ -10,14 +10,8 @@ import (
 
 // Rover contains the rover state and publishes methods for commanding the rover
 type Rover struct {
-	position   position.Position
+	position   *position.Position
 	surfaceMap mars.Map
-}
-
-// delta describes a change in position
-type delta struct {
-	x int
-	y int
 }
 
 // turn describes a change in direction
@@ -27,11 +21,11 @@ type turn struct {
 }
 
 // deltas describe the change in position given a particular direction
-var deltas = map[position.Direction]delta{
-	position.North: {x: 0, y: 1},
-	position.South: {x: 0, y: -1},
-	position.East:  {x: 1, y: 0},
-	position.West:  {x: -1, y: 0},
+var deltas = map[position.Direction]position.Coordinate{
+	position.North: position.NewCoordinate(0, 1),
+	position.South: position.NewCoordinate(0, -1),
+	position.East:  position.NewCoordinate(1, 0),
+	position.West:  position.NewCoordinate(-1, 0),
 }
 
 // turns describe the change in direction given a turn instruction and an original direction
@@ -43,7 +37,7 @@ var turns = map[position.Direction]turn{
 }
 
 // NewPosition creates a new rover initialized at x, y and facing in direction
-func New(position position.Position, surfaceMap mars.Map) *Rover {
+func New(position *position.Position, surfaceMap mars.Map) *Rover {
 	return &Rover{
 		position:   position,
 		surfaceMap: surfaceMap,
@@ -52,7 +46,7 @@ func New(position position.Position, surfaceMap mars.Map) *Rover {
 
 // Execute executes a list of instructions and returns the resulting position.
 // If an obstacle is encountered it returns the last position and ErrStoppedByObstacle
-func (r *Rover) Execute(instructions []mars.Instruction) (position.Position, error) {
+func (r *Rover) Execute(instructions []mars.Instruction) (*position.Position, error) {
 	var err error
 	for _, instruction := range instructions {
 		switch instruction {
@@ -68,7 +62,8 @@ func (r *Rover) Execute(instructions []mars.Instruction) (position.Position, err
 		}
 
 	}
-	return r.position, err
+	// copy the position to prevent modification of internal state
+	return position.NewPosition(r.position.Coordinate().X, r.position.Coordinate().Y, r.position.Direction()), err
 }
 
 func (r *Rover) move(instruction mars.Instruction) error {
@@ -77,21 +72,21 @@ func (r *Rover) move(instruction mars.Instruction) error {
 		scale = -1
 	}
 
-	change := deltas[r.position.Direction()]
-	proposed := r.position.Moved(change.x*scale, change.y*scale)
-	if r.surfaceMap.HasObstacle(position.Coordinate{proposed.X(), proposed.Y()}) {
+	change := deltas[r.position.Direction()].Scale(scale)
+	proposed := r.position.Coordinate().Add(change)
+	if r.surfaceMap.HasObstacle(proposed) {
 		return mars.ErrStoppedByObstacle
 	}
 
-	r.position = proposed
+	r.position.MoveTo(proposed)
 	return nil
 }
 
 func (r *Rover) turn(instruction mars.Instruction) {
 	change := turns[r.position.Direction()]
 	if instruction == mars.Left {
-		r.position = r.position.Turned(change.left)
+		r.position.TurnTo(change.left)
 	} else {
-		r.position = r.position.Turned(change.right)
+		r.position.TurnTo(change.right)
 	}
 }

@@ -24,21 +24,6 @@ var (
 	ErrStoppedByObstacle = errors.New("stopped by obstacle")
 )
 
-//// Coordinate is a point on the surface of mars
-//type Coordinate struct {
-//	X int
-//	Y int
-//}
-
-//// Position describes a point and direction on the surface of mars
-//type Position interface {
-//	X() int
-//	Y() int
-//	Direction() Direction
-//	Moved(x, y int) Position
-//	Turned(to Direction) Position
-//}
-
 // Rover interface is implemented by any rover implementation
 type Rover interface {
 	// Execute carries out a list of instructions and returns the resulting position

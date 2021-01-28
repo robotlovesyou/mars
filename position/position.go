@@ -59,43 +59,28 @@ type Position struct {
 }
 
 // NewPosition creates a new Position
-func NewPosition(x, y int, direction Direction) Position {
-	return Position{
+func NewPosition(x, y int, direction Direction) *Position {
+	return &Position{
 		coordinate: Coordinate{x, y},
 		direction:  direction,
 	}
 }
 
-// X is the x coordinate of the position
-func (p Position) X() int {
-	return p.coordinate.X
-}
-
-// Y is the y coordinate of the position
-func (p Position) Y() int {
-	return p.coordinate.Y
+func (p *Position) Coordinate() Coordinate {
+	return p.coordinate
 }
 
 // Direction is the direction of the Position
-func (p Position) Direction() Direction {
+func (p *Position) Direction() Direction {
 	return p.direction
 }
 
 // Move returns a new Position which is this position moved by the given amount
-func (p Position) Moved(x, y int) Position {
-	return Position{
-		coordinate: Coordinate{
-			X: p.coordinate.X + x,
-			Y: p.coordinate.Y + y,
-		},
-		direction: p.direction,
-	}
+func (p *Position) MoveTo(coordinate Coordinate) {
+	p.coordinate = coordinate
 }
 
 // Turned returns a new Position which is this position turned to the given direction
-func (p Position) Turned(direction Direction) Position {
-	return Position{
-		coordinate: p.coordinate,
-		direction:  direction,
-	}
+func (p *Position) TurnTo(direction Direction) {
+	p.direction = direction
 }

@@ -14,7 +14,7 @@ import (
 )
 
 // defaultStart returns the default start position.
-func defaultStart() position.Position {
+func defaultStart() *position.Position {
 	return position.NewPosition(0, 0, position.North)
 }
 
@@ -28,7 +28,7 @@ func instructions(command string, r *require.Assertions) []mars.Instruction {
 	return instructions
 }
 
-func testRoverExecute(command string, start, expected position.Position, t *testing.T) {
+func testRoverExecute(command string, start, expected *position.Position, t *testing.T) {
 	r := require.New(t)
 	rov := rover.New(start, mapping.New(nil))
 	inst := instructions(command, r)
@@ -37,7 +37,7 @@ func testRoverExecute(command string, start, expected position.Position, t *test
 	r.Equal(expected, pos)
 }
 
-func testRoverExecuteStop(command string, start, expected position.Position, surface mars.Map, t *testing.T) {
+func testRoverExecuteStop(command string, start, expected *position.Position, surface mars.Map, t *testing.T) {
 	r := require.New(t)
 	rov := rover.New(start, surface)
 	inst := instructions(command, r)
