@@ -63,7 +63,7 @@ func (r *Rover) Execute(instructions []mars.Instruction) (*position.Position, er
 
 	}
 	// copy the position to prevent modification of internal state
-	return position.NewPosition(r.position.Coordinate().X, r.position.Coordinate().Y, r.position.Direction()), err
+	return position.NewPosition(r.position.Coordinate(), r.position.Direction()), err
 }
 
 func (r *Rover) move(instruction mars.Instruction) error {

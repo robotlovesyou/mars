@@ -20,7 +20,7 @@ func TestDirectionStringIsCorrect(t *testing.T) {
 }
 
 func testPosition() *position.Position {
-	return position.NewPosition(1, 2, position.North)
+	return position.NewPosition(position.NewCoordinate(1, 2), position.North)
 }
 
 func TestCanAddACoordinateToACoordinate(t *testing.T) {

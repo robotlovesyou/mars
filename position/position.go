@@ -59,9 +59,9 @@ type Position struct {
 }
 
 // NewPosition creates a new Position
-func NewPosition(x, y int, direction Direction) *Position {
+func NewPosition(coordinate Coordinate, direction Direction) *Position {
 	return &Position{
-		coordinate: Coordinate{x, y},
+		coordinate: coordinate,
 		direction:  direction,
 	}
 }
