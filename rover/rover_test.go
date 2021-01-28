@@ -14,12 +14,12 @@ import (
 )
 
 // defaultStart returns the default start position.
-func defaultStart() mars.Position {
-	return position.New(0, 0, mars.North)
+func defaultStart() position.Position {
+	return position.New(0, 0, position.North)
 }
 
 func defaultMap() mars.Map {
-	return mapping.New([]mars.Coordinate{{1, 4}, {5, 5}, {7, 4}})
+	return mapping.New([]position.Coordinate{{1, 4}, {5, 5}, {7, 4}})
 }
 
 func instructions(command string, r *require.Assertions) []mars.Instruction {
@@ -28,7 +28,7 @@ func instructions(command string, r *require.Assertions) []mars.Instruction {
 	return instructions
 }
 
-func testRoverExecute(command string, start, expected mars.Position, t *testing.T) {
+func testRoverExecute(command string, start, expected position.Position, t *testing.T) {
 	r := require.New(t)
 	rov := rover.New(start, mapping.New(nil))
 	inst := instructions(command, r)
@@ -37,7 +37,7 @@ func testRoverExecute(command string, start, expected mars.Position, t *testing.
 	r.Equal(expected, pos)
 }
 
-func testRoverExecuteStop(command string, start, expected mars.Position, surface mars.Map, t *testing.T) {
+func testRoverExecuteStop(command string, start, expected position.Position, surface mars.Map, t *testing.T) {
 	r := require.New(t)
 	rov := rover.New(start, surface)
 	inst := instructions(command, r)
@@ -51,34 +51,34 @@ func TestRoverIsCorrectlyInitialized(t *testing.T) {
 }
 
 func TestRoverMovesForward(t *testing.T) {
-	expected := position.New(0, 1, mars.North)
+	expected := position.New(0, 1, position.North)
 	testRoverExecute("F", defaultStart(), expected, t)
 }
 
 func TestRoverMovesBackward(t *testing.T) {
-	expected := position.New(0, -1, mars.North)
+	expected := position.New(0, -1, position.North)
 	testRoverExecute("B", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsLeft(t *testing.T) {
-	expected := position.New(0, 0, mars.West)
+	expected := position.New(0, 0, position.West)
 	testRoverExecute("L", defaultStart(), expected, t)
 }
 
 func TestRoverTurnsRight(t *testing.T) {
-	expected := position.New(0, 0, mars.East)
+	expected := position.New(0, 0, position.East)
 	testRoverExecute("R", defaultStart(), expected, t)
 }
 
 func TestRoverFollowsInstructions(t *testing.T) {
-	start := position.New(4, 2, mars.East)
-	expected := position.New(6, 4, mars.North)
+	start := position.New(4, 2, position.East)
+	expected := position.New(6, 4, position.North)
 	testRoverExecute("FLFFFRFLB", start, expected, t)
 }
 
 func TestRoverStopsAtObstacle(t *testing.T) {
-	start := position.New(4, 2, mars.East)
-	expected := position.New(5, 4, mars.North)
+	start := position.New(4, 2, position.East)
+	expected := position.New(5, 4, position.North)
 	testRoverExecuteStop("FLFFFRFLB", start, expected, defaultMap(), t)
 }
 

@@ -3,14 +3,13 @@ package position_test
 import (
 	"testing"
 
-	"github.com/robotlovesyou/mars"
 	"github.com/robotlovesyou/mars/position"
 
 	"github.com/stretchr/testify/require"
 )
 
-func testPosition() *position.Position {
-	return position.New(1, 2, mars.North)
+func testPosition() position.Position {
+	return position.New(1, 2, position.North)
 }
 
 func TestPositionReportsCorrectX(t *testing.T) {
@@ -28,7 +27,7 @@ func TestPositionReportsCorrectY(t *testing.T) {
 func TestPositionReportsCorrectDirection(t *testing.T) {
 	r := require.New(t)
 	pos := testPosition()
-	r.Equal(mars.North, pos.Direction())
+	r.Equal(position.North, pos.Direction())
 }
 
 func TestMovesToExpectedCoordinate(t *testing.T) {
@@ -43,8 +42,8 @@ func TestMovesToExpectedCoordinate(t *testing.T) {
 func TestTurnsToExpectedDirection(t *testing.T) {
 	r := require.New(t)
 	pos := testPosition()
-	turned := pos.Turned(mars.West)
+	turned := pos.Turned(position.West)
 	r.Equal(pos.X(), turned.X())
 	r.Equal(pos.Y(), turned.Y())
-	r.Equal(mars.West, turned.Direction())
+	r.Equal(position.West, turned.Direction())
 }
