@@ -19,33 +19,31 @@ type Config struct {
 }
 
 func Load(reader *bufio.Reader) (*Config, error) {
-	var err error
-	var startLine, commandLine, coordLine string
-	var start *position.Position
-	var instructions []mars.Instruction
-	var coord position.Coordinate
 
-	startLine, err = reader.ReadString('\n')
+	startLine, err := reader.ReadString('\n')
 	if err != nil {
 		return nil, mars.ErrBadPosition
 	}
 
-	start, err = parser.ParsePosition(strings.TrimSpace(startLine))
+	start, err := parser.ParsePosition(strings.TrimSpace(startLine))
 	if err != nil {
 		return nil, err
 	}
 
-	commandLine, err = reader.ReadString('\n')
+	commandLine, err := reader.ReadString('\n')
 	if err != nil {
 		return nil, mars.ErrBadCommands
 	}
 
-	instructions, err = parser.ParseCommands(strings.TrimSpace(commandLine))
+	instructions, err := parser.ParseCommands(strings.TrimSpace(commandLine))
 	if err != nil {
 		return nil, err
 	}
 
+	var coord position.Coordinate
+	var coordLine string
 	coords := make([]position.Coordinate, 0)
+
 	for coordLine, err = reader.ReadString('\n'); err == nil; coordLine, err = reader.ReadString('\n') {
 		coordLine = strings.TrimSpace(coordLine)
 		if len(coordLine) == 0 {
