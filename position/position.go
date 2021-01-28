@@ -52,6 +52,10 @@ func (c Coordinate) Scale(scalar int) Coordinate {
 	return NewCoordinate(c.X*scalar, c.Y*scalar)
 }
 
+func (c Coordinate) String() string {
+	return fmt.Sprintf("%d, %d", c.X, c.Y)
+}
+
 // Position a position on the surface. It implements the mars.Position interface
 type Position struct {
 	coordinate Coordinate
@@ -83,4 +87,8 @@ func (p *Position) MoveTo(coordinate Coordinate) {
 // Turned returns a new Position which is this position turned to the given direction
 func (p *Position) TurnTo(direction Direction) {
 	p.direction = direction
+}
+
+func (p *Position) String() string {
+	return fmt.Sprintf("%v, %v", p.coordinate, p.direction)
 }

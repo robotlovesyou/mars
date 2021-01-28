@@ -23,7 +23,7 @@ func defaultMap() mars.Map {
 }
 
 func instructions(command string, r *require.Assertions) []mars.Instruction {
-	instructions, err := parser.Parse(command)
+	instructions, err := parser.ParseCommands(command)
 	r.NoError(err)
 	return instructions
 }
