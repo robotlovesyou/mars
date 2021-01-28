@@ -42,7 +42,7 @@ var turns = map[position.Direction]turn{
 	position.West:  {left: position.South, right: position.North},
 }
 
-// New creates a new rover initialized at x, y and facing in direction
+// NewPosition creates a new rover initialized at x, y and facing in direction
 func New(position position.Position, surfaceMap mars.Map) *Rover {
 	return &Rover{
 		position:   position,
@@ -79,7 +79,7 @@ func (r *Rover) move(instruction mars.Instruction) error {
 
 	change := deltas[r.position.Direction()]
 	proposed := r.position.Moved(change.x*scale, change.y*scale)
-	if r.surfaceMap.HasObstacle(proposed.X(), proposed.Y()) {
+	if r.surfaceMap.HasObstacle(position.Coordinate{proposed.X(), proposed.Y()}) {
 		return mars.ErrStoppedByObstacle
 	}
 

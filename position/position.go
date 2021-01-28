@@ -17,20 +17,21 @@ type Coordinate struct {
 	Y int
 }
 
+func NewCoordinate(x, y int) Coordinate {
+	return Coordinate{
+		X: x,
+		Y: y,
+	}
+}
+
 // Add two coordinates
 func (c Coordinate) Add(addend Coordinate) Coordinate {
-	return Coordinate{
-		X: c.X + addend.X,
-		Y: c.Y + addend.Y,
-	}
+	return NewCoordinate(c.X+addend.X, c.Y+addend.Y)
 }
 
 // Scale this coordinate by an integer, returning the result
 func (c Coordinate) Scale(scalar int) Coordinate {
-	return Coordinate{
-		X: c.X * scalar,
-		Y: c.Y * scalar,
-	}
+	return NewCoordinate(c.X*scalar, c.Y*scalar)
 }
 
 // Position a position on the surface. It implements the mars.Position interface
@@ -39,8 +40,8 @@ type Position struct {
 	direction  Direction
 }
 
-// New creates a new Position
-func New(x, y int, direction Direction) Position {
+// NewPosition creates a new Position
+func NewPosition(x, y int, direction Direction) Position {
 	return Position{
 		coordinate: Coordinate{x, y},
 		direction:  direction,

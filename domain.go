@@ -47,5 +47,5 @@ type Rover interface {
 
 // Map describes a map of the surface and can be queried for obstacles
 type Map interface {
-	HasObstacle(x, y int) bool
+	HasObstacle(coordinate position.Coordinate) bool
 }

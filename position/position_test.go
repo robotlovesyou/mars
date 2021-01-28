@@ -9,7 +9,7 @@ import (
 )
 
 func testPosition() position.Position {
-	return position.New(1, 2, position.North)
+	return position.NewPosition(1, 2, position.North)
 }
 
 func TestCanAddACoordinateToACoordinate(t *testing.T) {
