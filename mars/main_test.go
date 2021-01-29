@@ -46,5 +46,5 @@ func TestRunWithBadConfig(t *testing.T) {
 	r := require.New(t)
 	rdr := lineReaderFromString("bad" + exampleConfig)
 	_, err := run(rdr)
-	r.ErrorIs(mars.ErrBadPosition, err)
+	r.ErrorIs(mars.ErrBadConfig, err)
 }

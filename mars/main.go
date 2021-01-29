@@ -30,7 +30,7 @@ func run(confReader *bufio.Reader) (out *position.Position, err error) {
 	if err != nil {
 		fmt.Println("Invalid Config. Example:")
 		fmt.Println(exampleConfig)
-		return out, err
+		return out, mars.ErrBadConfig
 	}
 
 	rov := rover.New(conf.Start, conf.Map)
@@ -39,8 +39,13 @@ func run(confReader *bufio.Reader) (out *position.Position, err error) {
 
 // prepareOutput prepares the result of the journey for printing
 func prepareOutput(pos *position.Position, err error) string {
-	if err != nil && !errors.Is(mars.ErrStoppedByObstacle, err) {
-		return fmt.Sprintf("encountered unexpected error: %v", err)
+	if err != nil {
+		if errors.Is(mars.ErrBadConfig, err) {
+			return ""
+		}
+		if !errors.Is(mars.ErrStoppedByObstacle, err) {
+			return fmt.Sprintf("encountered unexpected error: %v", err)
+		}
 	}
 
 	posStr := fmt.Sprintf("%v", pos)

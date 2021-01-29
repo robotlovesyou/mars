@@ -25,6 +25,8 @@ var (
 	ErrBadPosition = errors.New("bad position")
 	// ErrBadCoordinate is returned if a parsed coordinate is invalid
 	ErrBadCoordinate = errors.New("bad coordinate")
+	//ErrBadConfig is returned when the configuration is bad
+	ErrBadConfig = errors.New("bad config")
 )
 
 // Rover interface is implemented by any rover implementation
