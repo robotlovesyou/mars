@@ -6,7 +6,7 @@ Implementation of the mars rover challenge.
 
 Tests can be run from the root of the project with
 ```bash
-go test ./...
+ go test -mod=vendor ./...
 ```
 
 ## Running
