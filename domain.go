@@ -27,8 +27,6 @@ var (
 	ErrBadCoordinate = errors.New("bad coordinate")
 )
 
-var ()
-
 // Rover interface is implemented by any rover implementation
 type Rover interface {
 	// Execute carries out a list of instructions and returns the resulting position
