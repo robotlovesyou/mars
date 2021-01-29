@@ -1,3 +1,4 @@
+// package config implements a service for loading configuration information
 package config
 
 import (
@@ -12,12 +13,14 @@ import (
 	"github.com/robotlovesyou/mars/position"
 )
 
+// Config for a journey by the rover
 type Config struct {
 	Start        *position.Position
 	Instructions []mars.Instruction
 	Map          mars.Map
 }
 
+// Load a configuration from the reader
 func Load(reader *bufio.Reader) (*Config, error) {
 
 	startLine, err := reader.ReadString('\n')

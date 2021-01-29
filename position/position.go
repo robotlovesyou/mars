@@ -1,4 +1,4 @@
-// package position contains types which can be used to describe a position (coordinates and direction)
+// package position contains types which can be used to describe a position on the surface (coordinates and direction)
 package position
 
 import "fmt"
@@ -6,6 +6,7 @@ import "fmt"
 // Direction describes the direction the rover is facing
 type Direction byte
 
+// Direction Constants
 const (
 	North Direction = 'N'
 	South Direction = 'S'
@@ -13,6 +14,7 @@ const (
 	West  Direction = 'W'
 )
 
+// String interface implementation for Direction
 func (d Direction) String() string {
 	switch d {
 	case North:
@@ -35,6 +37,7 @@ type Coordinate struct {
 	Y int
 }
 
+// NewCoordinate constructs a new coordinate
 func NewCoordinate(x, y int) Coordinate {
 	return Coordinate{
 		X: x,
@@ -52,6 +55,7 @@ func (c Coordinate) Scale(scalar int) Coordinate {
 	return NewCoordinate(c.X*scalar, c.Y*scalar)
 }
 
+// String interface implamentation for coordinate
 func (c Coordinate) String() string {
 	return fmt.Sprintf("%d, %d", c.X, c.Y)
 }
@@ -70,11 +74,12 @@ func NewPosition(coordinate Coordinate, direction Direction) *Position {
 	}
 }
 
+// Coordinate of this position
 func (p *Position) Coordinate() Coordinate {
 	return p.coordinate
 }
 
-// Direction is the direction of the Position
+// Direction of the Position
 func (p *Position) Direction() Direction {
 	return p.direction
 }
@@ -89,6 +94,7 @@ func (p *Position) TurnTo(direction Direction) {
 	p.direction = direction
 }
 
+// String interface implementation for Position
 func (p *Position) String() string {
 	return fmt.Sprintf("%v, %v", p.coordinate, p.direction)
 }

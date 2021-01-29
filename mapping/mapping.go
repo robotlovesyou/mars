@@ -1,8 +1,9 @@
+// package mapping implements a service which can be queried for the location of obstacles
 package mapping
 
 import "github.com/robotlovesyou/mars/position"
 
-// Map can be queried for obstacles
+// Map can be queried for obstacles on the surface
 type Map struct {
 	obstacles map[position.Coordinate]bool
 }

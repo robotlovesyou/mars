@@ -25,14 +25,14 @@ func testPosition() *position.Position {
 
 func TestCanAddACoordinateToACoordinate(t *testing.T) {
 	r := require.New(t)
-	res := position.Coordinate{1, 2}.Add(position.Coordinate{1, 2})
-	r.Equal(position.Coordinate{2, 4}, res)
+	res := position.NewCoordinate(1, 2).Add(position.NewCoordinate(1, 2))
+	r.Equal(position.NewCoordinate(2, 4), res)
 }
 
 func TestCanScaleACoordinate(t *testing.T) {
 	r := require.New(t)
-	res := position.Coordinate{1, 2}.Scale(-1)
-	r.Equal(position.Coordinate{-1, -2}, res)
+	res := position.NewCoordinate(1, 2).Scale(-1)
+	r.Equal(position.NewCoordinate(-1, -2), res)
 }
 
 func TestPositionReportsCorrectCoordinate(t *testing.T) {

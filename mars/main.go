@@ -2,8 +2,11 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
+
+	"github.com/robotlovesyou/mars/position"
 
 	"github.com/robotlovesyou/mars"
 	"github.com/robotlovesyou/mars/rover"
@@ -21,7 +24,8 @@ FLFFFRFLB
 `
 )
 
-func run(confReader *bufio.Reader) (out string, err error) {
+// run loads configuration and sends the rover on its journey
+func run(confReader *bufio.Reader) (out *position.Position, err error) {
 	conf, err := config.Load(confReader)
 	if err != nil {
 		fmt.Println("Invalid Config. Example:")
@@ -30,9 +34,20 @@ func run(confReader *bufio.Reader) (out string, err error) {
 	}
 
 	rov := rover.New(conf.Start, conf.Map)
-	res, err := rov.Execute(conf.Instructions)
-	out = fmt.Sprintf("%v", res)
-	return out, err
+	return rov.Execute(conf.Instructions)
+}
+
+// prepareOutput prepares the result of the journey for printing
+func prepareOutput(pos *position.Position, err error) string {
+	if err != nil && !errors.Is(mars.ErrStoppedByObstacle, err) {
+		return fmt.Sprintf("encountered unexpected error: %v", err)
+	}
+
+	posStr := fmt.Sprintf("%v", pos)
+	if errors.Is(mars.ErrStoppedByObstacle, err) {
+		posStr += " STOPPED"
+	}
+	return posStr
 }
 
 func main() {
@@ -46,9 +61,5 @@ func main() {
 		fmt.Println(usage)
 	}
 
-	out, err := run(bufio.NewReader(f))
-	if err == mars.ErrStoppedByObstacle {
-		out += " STOPPED"
-	}
-	fmt.Println(out)
+	fmt.Println(prepareOutput(run(bufio.NewReader(f))))
 }

@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const goodConfig = `4, 2, EAST
+const goodConfig = `-4, 2, EAST
 FLFFFRFLB
 1, 4
 3, 5
-7, 4
+-7, 4
 `
 
 const badStart = `4, 2, 3, EAST
@@ -55,7 +55,7 @@ func TestReadsConfig(t *testing.T) {
 	rdr := lineReaderWith(goodConfig)
 	conf, err := config.Load(rdr)
 	r.NoError(err)
-	r.Equal(position.NewPosition(position.NewCoordinate(4, 2), position.East), conf.Start)
+	r.Equal(position.NewPosition(position.NewCoordinate(-4, 2), position.East), conf.Start)
 	r.Equal([]mars.Instruction{
 		mars.Forward,
 		mars.Left,
@@ -68,7 +68,7 @@ func TestReadsConfig(t *testing.T) {
 		mars.Backward}, conf.Instructions)
 	r.True(conf.Map.HasObstacle(position.NewCoordinate(1, 4)), "1, 4")
 	r.True(conf.Map.HasObstacle(position.NewCoordinate(3, 5)), "3, 5")
-	r.True(conf.Map.HasObstacle(position.NewCoordinate(7, 4)), "7, 4")
+	r.True(conf.Map.HasObstacle(position.NewCoordinate(-7, 4)), "-7, 4")
 	r.False(conf.Map.HasObstacle(position.NewCoordinate(4, 2)), "4, 2 should have no obstacle")
 }
 

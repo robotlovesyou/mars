@@ -1,3 +1,4 @@
+// package parser implements functions for parsing from strings to configuration primitives
 package parser
 
 import (
@@ -10,8 +11,8 @@ import (
 )
 
 var (
-	positionRegex   = regexp.MustCompile(`^(\d+), (\d+), (NORTH|SOUTH|EAST|WEST)$`)
-	coordinateRegex = regexp.MustCompile(`^(\d+), (\d+)$`)
+	positionRegex   = regexp.MustCompile(`^(-?\d+), (-?\d+), (NORTH|SOUTH|EAST|WEST)$`)
+	coordinateRegex = regexp.MustCompile(`^(-?\d+), (-?\d+)$`)
 )
 
 // ParseCommands transforms a command string into a slice of instructions.
@@ -64,6 +65,7 @@ func ParsePosition(pos string) (*position.Position, error) {
 	return position.NewPosition(position.NewCoordinate(int(x), int(y)), d), nil
 }
 
+// ParseCoordinate returns a coordinate for a string such as -2, 3
 func ParseCoordinate(coordString string) (coord position.Coordinate, err error) {
 	res := coordinateRegex.FindStringSubmatch(coordString)
 	if len(res) != 3 { // one for each digit group plus the full match

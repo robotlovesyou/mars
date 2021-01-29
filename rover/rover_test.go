@@ -71,8 +71,8 @@ func TestRoverTurnsRight(t *testing.T) {
 }
 
 func TestRoverFollowsInstructions(t *testing.T) {
-	start := position.NewPosition(position.NewCoordinate(4, 2), position.East)
-	expected := position.NewPosition(position.NewCoordinate(6, 4), position.North)
+	start := position.NewPosition(position.NewCoordinate(-4, 2), position.East)
+	expected := position.NewPosition(position.NewCoordinate(-2, 4), position.North)
 	testRoverExecute("FLFFFRFLB", start, expected, t)
 }
 

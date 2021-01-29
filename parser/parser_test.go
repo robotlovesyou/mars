@@ -48,10 +48,10 @@ func TestCorrectlyParsesPosition(t *testing.T) {
 		d position.Direction
 		s string
 	}{
-		{4, 2, position.East, "4, 2, EAST"},
-		{44, 22, position.West, "44, 22, WEST"},
-		{444, 222, position.North, "444, 222, NORTH"},
-		{4444, 2222, position.South, "4444, 2222, SOUTH"},
+		{4, -2, position.East, "4, -2, EAST"},
+		{-44, 22, position.West, "-44, 22, WEST"},
+		{444, -222, position.North, "444, -222, NORTH"},
+		{-4444, 2222, position.South, "-4444, 2222, SOUTH"},
 	}
 	r := require.New(t)
 	for _, test := range tests {
@@ -77,8 +77,8 @@ func TestParsesCoordinates(t *testing.T) {
 		y int
 		s string
 	}{
-		{4, 2, "4, 2"},
-		{44, 22, "44, 22"},
+		{4, -2, "4, -2"},
+		{-44, 22, "-44, 22"},
 	}
 
 	r := require.New(t)
